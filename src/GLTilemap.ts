@@ -197,7 +197,7 @@ export class GLTilemap
 
             if (layer.type === ELayerType.Tilelayer)
             {
-                layer.repeatTiles = false;
+                layer.repeatTiles = v;
             }
         }
     }
@@ -583,8 +583,7 @@ export class GLTilemap
                     ASSERT(!!(tileShader.uniforms.uLayer
                         && tileShader.uniforms.uInverseLayerTileSize
                         && tileShader.uniforms.uTilesetTileSize
-                        && tileShader.uniforms.uTilesetTileOffset
-                        && tileShader.uniforms.uInverseTilesetTextureSize),
+                        && tileShader.uniforms.uTilesetTileOffset),
                         'Invalid uniforms for tile layer shader.');
                     // @endif
 
@@ -599,9 +598,9 @@ export class GLTilemap
                             this._tilesetIndices[index],
                         );
                     }
+
                     gl.uniform2fv(tileShader.uniforms.uTilesetTileSize!, this._tilesetTileSizeBuffer);
                     gl.uniform2fv(tileShader.uniforms.uTilesetTileOffset!, this._tilesetTileOffsetBuffer);
-                    gl.uniform2fv(tileShader.uniforms.uInverseTilesetTextureSize!, this._inverseTilesetTextureSizeBuffer);
                 }
 
                 return tileShader;
@@ -727,24 +726,24 @@ export class GLTilemap
             .replace('#pragma define(NUM_TILESETS)', `#define NUM_TILESETS ${this._tilesets.length}`)
             .replace('#pragma define(NUM_TILESET_IMAGES)', `#define NUM_TILESET_IMAGES ${this._totalTilesetImages}`)
             .replace(
-                '#pragma declare_tileset_uniforms', 
+                '#pragma declare_tileset_uniforms',
                 new Array(this._totalTilesetImages)
                     .fill(0).map((_,i) => i)
                     .map((i) => `uniform sampler2D uTilesets${i};`)
                     .join('\n'),
             )
-                    
+
             .replace(
-                '#pragma get_texture_cases', 
+                '#pragma get_texture_cases',
                 new Array(this._totalTilesetImages)
                     .fill(0).map((_,i) => i)
-                    .map((i) => 
+                    .map((i) =>
 `if(index == ${i}){
-    return texture2D(uTilesets${i}, coord * uInverseTilesetTextureSize[${i}]); 
+    return texture(uTilesets${i}, coord * (vec2(1.0, 1.0) / vec2(textureSize(uTilesets${i}, 0))));
 }`)
                     .join('\n'),
             );
-            
+console.log(tilelayerFragShader);
         const gl = this.gl!;
 
         this.shaders = {

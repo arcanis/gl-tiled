@@ -7,6 +7,7 @@ import { loadImage } from './utils/loadImage';
 import { IDictionary } from './IDictionary';
 import { IAssetCache } from './IAssetCache';
 import { IPoint } from './IPoint';
+import { extrudeImage } from './utils/extrudeImage';
 
 export interface ITileProps
 {
@@ -49,6 +50,18 @@ export class GLTileset
 
     constructor(public readonly desc: ITileset, assetCache?: IAssetCache)
     {
+        if (this.desc.image) {
+            const rows = Math.ceil(desc.imageheight / desc.tileheight);
+
+            desc.margin = 1;
+            desc.spacing = 2;
+
+            desc.imagewidth += (desc.columns - 1) * desc.spacing + desc.margin * 2;
+            desc.imageheight += (rows - 1) * desc.spacing + desc.margin * 2;
+
+            console.log(desc.imagewidth, desc.imageheight, this.desc.image)
+        }
+
         // load the images
         if (this.desc.image)
         {
@@ -201,7 +214,12 @@ export class GLTileset
         {
             if (!errEvent)
             {
-                this.images[imgIndex] = img;
+                this.images[imgIndex] = extrudeImage(img, {
+                    tileWidth: this.desc.tilewidth,
+                    tileHeight: this.desc.tileheight,
+                    marginSize: 1,
+                });
+
                 this._createTexture(imgIndex);
             }
         });

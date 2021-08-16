@@ -1,7 +1,9 @@
+#version 300 es
+
 precision highp float;
 
-attribute vec2 aPosition;
-attribute vec2 aTexture;
+in vec2 aPosition;
+in vec2 aTexture;
 
 uniform float uInverseTileScale;
 
@@ -10,8 +12,8 @@ uniform vec2 uViewportSize;
 uniform vec2 uInverseLayerTileCount;
 uniform vec2 uInverseLayerTileSize;
 
-varying vec2 vPixelCoord;
-varying vec2 vTextureCoord;
+out vec2 vPixelCoord;
+out vec2 vTextureCoord;
 
 void main()
 {

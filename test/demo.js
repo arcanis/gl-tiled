@@ -82,7 +82,7 @@ function onLoad()
     dbgTextElm = document.getElementById('debug-txt');
     canvasElm = document.getElementById('view');
     dataViewElm = document.getElementById('data-view');
-    gl = canvasElm.getContext('webgl');
+    gl = canvasElm.getContext('webgl2');
 
     stats.dom.style.left = '';
     stats.dom.style.right = '300px';

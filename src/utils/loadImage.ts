@@ -2,7 +2,7 @@ import { IAssetCache } from '../IAssetCache';
 
 export type TErrorEventCallback<T> = (error: ErrorEvent | null, arg: T) => void;
 
-export function loadImage(url: string, cache?: IAssetCache, cb?: TErrorEventCallback<TexImageSource>): TexImageSource
+export function loadImage(url: string, cache?: IAssetCache, cb?: TErrorEventCallback<HTMLImageElement>): HTMLImageElement
 {
     const asset = cache && cache[url];
 

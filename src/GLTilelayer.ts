@@ -213,6 +213,8 @@ export class GLTilelayer
         if (doBind)
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
+        console.log(this.desc.width, this.desc.height)
+
         gl.texImage2D(gl.TEXTURE_2D,
             0,          // level
             gl.RGBA,    // internal format
